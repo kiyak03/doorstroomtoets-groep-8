@@ -22,20 +22,23 @@ app.use(cors());
 app.use(express.json({ limit: '5mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Ensure data folder and results.json exist
-try {
-  const dir = path.dirname(DATA_FILE);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+// Ensure data folder and results.json exist (alleen voor lokale privé-server thuis; op Vercel slaan we niets op de gedeelde server op i.v.m. privacy)
+if (!IS_VERCEL) {
+  try {
+    const dir = path.dirname(DATA_FILE);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    if (!fs.existsSync(DATA_FILE)) {
+      fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2), 'utf-8');
+    }
+  } catch (err) {
+    // Negeren
   }
-  if (!fs.existsSync(DATA_FILE)) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2), 'utf-8');
-  }
-} catch (err) {
-  // Op een read-only serverless bestandssysteem negeren
 }
 
 function readResults() {
+  if (IS_VERCEL) return [];
   try {
     const raw = fs.readFileSync(DATA_FILE, 'utf-8');
     return JSON.parse(raw);
@@ -45,10 +48,11 @@ function readResults() {
 }
 
 function saveResults(results) {
+  if (IS_VERCEL) return;
   try {
     fs.writeFileSync(DATA_FILE, JSON.stringify(results, null, 2), 'utf-8');
   } catch (err) {
-    // Negeren als schijf read-only is
+    // Negeren
   }
 }
 
@@ -116,8 +120,8 @@ app.get('/api/network-info', async (req, res) => {
 // 2. Genereer een nieuwe procedurele toets
 app.post('/api/generate-test', (req, res) => {
   try {
-    const { domain = 'all', count = 10, mode = 'practice', subTopic = 'all' } = req.body;
-    const test = generateTest({ domain, count, mode, subTopic });
+    const { domain = 'all', count = 10, mode = 'practice', subTopic = 'all', excludeTextIds = [] } = req.body;
+    const test = generateTest({ domain, count, mode, subTopic, excludeTextIds });
     res.json(test);
   } catch (err) {
     console.error('Fout bij genereren toets:', err);

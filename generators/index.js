@@ -125,12 +125,12 @@ function drawUniqueTaalQuestions(count, mode = 'practice') {
   return questions;
 }
 
-// Haal unieke begrijpend lezen vragen op via het anti-herhalingsdeck (gescheiden per modus)
-function drawUniqueReadingQuestions(targetCount, mode = 'practice') {
-  return drawReadingQuestions(targetCount, mode);
+// Haal unieke begrijpend lezen vragen op via het anti-herhalingsdeck (gescheiden per modus & per apparaat)
+function drawUniqueReadingQuestions(targetCount, mode = 'practice', excludeTextIds = []) {
+  return drawReadingQuestions(targetCount, mode, excludeTextIds);
 }
 
-function generateTest({ domain = 'all', count = 10, mode = 'practice', subTopic = 'all' }) {
+function generateTest({ domain = 'all', count = 10, mode = 'practice', subTopic = 'all', excludeTextIds = [] }) {
   // Laat officiële aantallen toe (tot 65)
   const targetCount = Math.max(5, Math.min(65, parseInt(count) || 10));
   let questions = [];
@@ -140,7 +140,7 @@ function generateTest({ domain = 'all', count = 10, mode = 'practice', subTopic 
   } else if (domain === 'taalverzorging') {
     questions = drawUniqueTaalQuestions(targetCount, mode);
   } else if (domain === 'begrijpendLezen') {
-    questions = drawUniqueReadingQuestions(targetCount, mode);
+    questions = drawUniqueReadingQuestions(targetCount, mode, excludeTextIds);
   } else {
     // Gecombineerde Doorstroomtoets (Cito Mix)
     const rekenenCount = Math.round(targetCount * 0.38);
@@ -148,7 +148,7 @@ function generateTest({ domain = 'all', count = 10, mode = 'practice', subTopic 
     const taalCount = targetCount - rekenenCount - begrijpendCount;
 
     const rQs = drawUniqueRekenenQuestions(rekenenCount, mode, 'all');
-    const bQs = drawUniqueReadingQuestions(begrijpendCount, mode);
+    const bQs = drawUniqueReadingQuestions(begrijpendCount, mode, excludeTextIds);
     const tQs = drawUniqueTaalQuestions(taalCount, mode);
 
     // Groepeer vragen ordelijk: eerst een blok rekenen, dan begrijpend lezen (teksten bij elkaar!), dan taalverzorging

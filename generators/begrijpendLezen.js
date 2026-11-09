@@ -39,8 +39,16 @@ function shuffleOptions(options, correctOption) {
   };
 }
 
-// Lees of initialiseer het rotatie-deck van leesteksten op schijf
+// Lees of initialiseer het rotatie-deck van leesteksten op schijf (alleen lokaal; op Vercel per apparaat via excludeTextIds)
 function loadDeckState() {
+  if (process.env.VERCEL) {
+    return {
+      practiceQueue: [],
+      examQueue: [],
+      recentPractice: [],
+      recentExam: []
+    };
+  }
   try {
     if (fs.existsSync(DECK_FILE)) {
       const raw = fs.readFileSync(DECK_FILE, 'utf-8');
@@ -61,6 +69,7 @@ function loadDeckState() {
 }
 
 function saveDeckState(state) {
+  if (process.env.VERCEL) return;
   try {
     const dir = path.dirname(DECK_FILE);
     if (!fs.existsSync(dir)) {
@@ -73,8 +82,21 @@ function saveDeckState(state) {
 }
 
 // Haal het volgende aantal unieke teksten op uit het rotatie-deck voor de gekozen modus
-function getNextRotatedTexts(neededTextsCount, mode = 'practice') {
+function getNextRotatedTexts(neededTextsCount, mode = 'practice', excludeTextIds = []) {
   const pool = mode === 'exam' ? toetsTeksten : oefenTeksten;
+  const clientExcluded = new Set(Array.isArray(excludeTextIds) ? excludeTextIds : []);
+
+  // Als de browser zelf bijhoudt welke teksten dit kind al gezien heeft (of op Vercel):
+  if (process.env.VERCEL || clientExcluded.size > 0) {
+    const unseen = fisherYatesShuffle(
+      pool.filter(t => !clientExcluded.has(t.id) && !clientExcluded.has(t.titel))
+    );
+    const seen = fisherYatesShuffle(
+      pool.filter(t => clientExcluded.has(t.id) || clientExcluded.has(t.titel))
+    );
+    return [...unseen, ...seen].slice(0, neededTextsCount);
+  }
+
   const state = loadDeckState();
   const queueKey = mode === 'exam' ? 'examQueue' : 'practiceQueue';
   const recentKey = mode === 'exam' ? 'recentExam' : 'recentPractice';
@@ -177,13 +199,13 @@ function buildReadingQuestionForLevel(tekst, v, level = 1) {
 }
 
 // Hoofdfunctie voor het trekken van Begrijpend Lezen vragen verdeeld over gevarieerde teksten
-function drawReadingQuestions(targetCount = 10, mode = 'practice') {
+function drawReadingQuestions(targetCount = 10, mode = 'practice', excludeTextIds = []) {
   const questions = [];
   // Elke tekst heeft 5 vragen; bereken hoeveel teksten nodig zijn
   const questionsPerText = 5;
   const neededTextsCount = Math.max(1, Math.ceil(targetCount / questionsPerText));
   const deckMode = mode === 'exam' ? 'exam' : 'practice';
-  const selectedTexts = getNextRotatedTexts(neededTextsCount, deckMode);
+  const selectedTexts = getNextRotatedTexts(neededTextsCount, deckMode, excludeTextIds);
 
   for (let tIdx = 0; tIdx < selectedTexts.length; tIdx++) {
     const tekst = selectedTexts[tIdx];

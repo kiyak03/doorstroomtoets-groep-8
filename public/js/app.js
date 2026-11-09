@@ -409,6 +409,14 @@
     btn.innerHTML = '⏳ Toets wordt klaargezet...';
     btn.disabled = true;
 
+    const seenKey = selectedMode === 'exam' ? 'doorstroomtoets_seen_texts_exam' : 'doorstroomtoets_seen_texts_practice';
+    let excludeTextIds = [];
+    try {
+      excludeTextIds = JSON.parse(localStorage.getItem(seenKey) || '[]');
+    } catch (e) {
+      excludeTextIds = [];
+    }
+
     try {
       const res = await fetch('/api/generate-test', {
         method: 'POST',
@@ -417,7 +425,8 @@
           domain: selectedDomain,
           subTopic: selectedDomain === 'rekenen' ? selectedSubTopic : 'all',
           count: parseInt(selectedCount),
-          mode: selectedMode
+          mode: selectedMode,
+          excludeTextIds
         })
       });
 
@@ -489,6 +498,22 @@
     growthLevel = 1;
     maxGrowthLevel = 1;
     questionFeedbackExtra = {};
+
+    // Sla geziene leesteksten lokaal op dit eigen apparaat op (zodat elk kind een eigen tekstrotatie heeft)
+    try {
+      const seenKey = test.mode === 'exam' ? 'doorstroomtoets_seen_texts_exam' : 'doorstroomtoets_seen_texts_practice';
+      const prevSeen = JSON.parse(localStorage.getItem(seenKey) || '[]');
+      const newTitles = Array.from(
+        new Set((test.questions || []).map(q => q.passageTitle).filter(Boolean))
+      );
+      if (newTitles.length > 0) {
+        const merged = [...prevSeen.filter(t => !newTitles.includes(t)), ...newTitles];
+        // Houd de laatste 16 van de 20 teksten vast zodat er altijd een frisse cyclus is
+        localStorage.setItem(seenKey, JSON.stringify(merged.slice(-16)));
+      }
+    } catch (e) {
+      // Negeer als localStorage niet beschikbaar is
+    }
 
     startTimer();
     renderQuestionNavigator();
