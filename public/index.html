@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Doorstroomtoets Groep 8 - Oefenen op iPad & Computer</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand" id="brand-btn">
+      <div class="brand-icon">🎓</div>
+      <div class="brand-text">
+        <h1>Doorstroomtoets Groep 8</h1>
+        <p>Oefenmeester voor iPad & Thuisnetwerk</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-header" id="btn-show-theme-modal" title="Kies je eigen achtergrondkleur">
+        🎨 Kleur
+      </button>
+      <button class="btn-header btn-ipad-badge" id="btn-show-wifi-modal">
+        <span id="header-wifi-badge">📱 iPad Wi-Fi</span>
+      </button>
+      <button class="btn-header" id="student-name-badge">
+        👤 Mijn Kind
+      </button>
+      <button class="btn-header" id="btn-show-stats">
+        📊 Resultaten
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- 1. START / HOME SCHERM -->
+    <section class="view active" id="view-home">
+      <!-- RESUME BANNER (Zichtbaar als er een opgeslagen toets is) -->
+      <div class="resume-banner" id="resume-banner" style="display: none;">
+        <div class="resume-info">
+          <h3>👋 Welkom terug!</h3>
+          <p id="resume-banner-text">Je was bezig met een toets. Wil je direct verder gaan waar je was gebleven?</p>
+        </div>
+        <div class="resume-actions">
+          <button class="btn-resume" id="btn-resume-session">▶️ Verdergaan met Toets</button>
+          <button class="btn-discard-session" id="btn-discard-session">Wissen 🗑️</button>
+        </div>
+      </div>
+
+      <div class="welcome-hero">
+        <h2>Klaar voor de Doorstroomtoets? 🚀</h2>
+        <p>Oefen onbeperkt met gevarieerde opgaven op groep 8 niveau. Begrijp je een som even niet? Gebruik de <strong>💡 Hint-knop</strong> voor stap-voor-stap uitleg of het <strong>✏️ Kladblok</strong> om mee te rekenen!</p>
+        
+        <div class="hero-stats-banner">
+          <div class="stat-pill">🧮 Breuken, Procenten & Maten</div>
+          <div class="stat-pill">📖 Begrijpend Lezen & Teksten</div>
+          <div class="stat-pill">✍️ Spelling d/t & Grammatica</div>
+        </div>
+      </div>
+
+      <div class="setup-card">
+        <h3 class="section-title">1. Kies het vakgebied</h3>
+        <div class="domain-grid">
+          <div class="domain-choice selected" data-domain="all">
+            <div class="domain-icon">🌟</div>
+            <h4>Doorstroomtoets (Mix)</h4>
+            <p>Rekenen, Lezen en Taal gecombineerd zoals op de echte toets.</p>
+          </div>
+          <div class="domain-choice" data-domain="rekenen">
+            <div class="domain-icon">🧮</div>
+            <h4>Alleen Rekenen</h4>
+            <p>Kies alle rekenonderwerpen door elkaar óf oefen gericht op 1 specifiek onderwerp!</p>
+          </div>
+          <div class="domain-choice" data-domain="begrijpendLezen">
+            <div class="domain-icon">📖</div>
+            <h4>Begrijpend Lezen</h4>
+            <p>Interessante verhalen en informatieve teksten met gerichte vragen.</p>
+          </div>
+          <div class="domain-choice" data-domain="taalverzorging">
+            <div class="domain-icon">✍️</div>
+            <h4>Taalverzorging</h4>
+            <p>Werkwoordspelling (d/t), tussenletters, trema's en zinsontleding.</p>
+          </div>
+        </div>
+
+        <!-- Sub-onderwerp Kiezer voor Rekenen (Zichtbaar zodra 'Alleen Rekenen' is geselecteerd) -->
+        <div class="subtopic-section" id="rekenen-subtopic-section" style="display: none;">
+          <h3 class="section-title" style="margin-top: 4px;">1b. Kies je Rekenonderwerp</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">
+            Kies één specifiek onderwerp om extra te trainen, of kies de volledige mix:
+          </p>
+          <div class="subtopic-grid" id="rekenen-subtopic-grid">
+            <div class="subtopic-pill selected" data-subtopic="all">
+              <span class="subtopic-icon">🌟</span>
+              <div class="subtopic-info">
+                <strong>Alle Onderwerpen (Mix)</strong>
+                <span>Alle 19 soorten rekensommen</span>
+              </div>
+            </div>
+            <div class="subtopic-pill" data-subtopic="breuken">
+              <span class="subtopic-icon">🍕</span>
+              <div class="subtopic-info">
+                <strong>Breuken</strong>
+                <span>Optellen, aftrekken, ×, ÷ & deel van geheel</span>
+              </div>
+            </div>
+            <div class="subtopic-pill" data-subtopic="procenten">
+              <span class="subtopic-icon">💯</span>
+              <div class="subtopic-info">
+                <strong>Procenten & Korting</strong>
+                <span>Korting, BTW, stijging & terugrekenen</span>
+              </div>
+            </div>
+            <div class="subtopic-pill" data-subtopic="verhoudingen">
+              <span class="subtopic-icon">⚖️</span>
+              <div class="subtopic-info">
+                <strong>Verhoudingen & Schaal</strong>
+                <span>Verhoudingstabel, recepten & kaartschaal</span>
+              </div>
+            </div>
+            <div class="subtopic-pill" data-subtopic="metriek">
+              <span class="subtopic-icon">📏</span>
+              <div class="subtopic-info">
+                <strong>Metriek Stelsel & Maten</strong>
+                <span>Lengte (km/m/cm), gewicht & liters (dm³)</span>
+              </div>
+            </div>
+            <div class="subtopic-pill" data-subtopic="meetkunde">
+              <span class="subtopic-icon">📐</span>
+              <div class="subtopic-info">
+                <strong>Oppervlakte, Omtrek & Inhoud</strong>
+                <span>Rechthoek, L-vorm, tegels & inhoud</span>
+              </div>
+            </div>
+            <div class="subtopic-pill" data-subtopic="tijdSnelheid">
+              <span class="subtopic-icon">⏱️</span>
+              <div class="subtopic-info">
+                <strong>Tijd, Snelheid & Afstand</strong>
+                <span>Km/u berekenen, reistijd & klokkijken</span>
+              </div>
+            </div>
+            <div class="subtopic-pill" data-subtopic="gemiddeldeGetallen">
+              <span class="subtopic-icon">📊</span>
+              <div class="subtopic-info">
+                <strong>Gemiddelde & Grote Getallen</strong>
+                <span>Rapportcijfers & grote getallen afronden</span>
+              </div>
+            </div>
+            <div class="subtopic-pill" data-subtopic="geldVerhaaltjes">
+              <span class="subtopic-icon">💶</span>
+              <div class="subtopic-info">
+                <strong>Geld, Kommagetallen & Rest</strong>
+                <span>Wisselgeld, rekening delen & delen met rest</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="config-row">
+          <div class="config-col">
+            <h3 class="section-title">2. Aantal vragen</h3>
+            <div class="choice-pills" id="count-pills-container">
+              <div class="pill-option selected" data-count="60">🏆 Cito Toets (60 vragen)</div>
+              <div class="pill-option" data-count="30">⚖️ Halve Toets (30 vragen)</div>
+              <div class="pill-option" data-count="10">⚡ Snel Oefenen (10 vragen)</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="section-title">3. Hoe wil je oefenen?</h3>
+        <div class="mode-choices mode-choices-three">
+          <div class="mode-card selected" data-mode="practice">
+            <h4>🟢 Oefenmodus (Vrije Mix met Hints)</h4>
+            <p>Direct zien of je antwoord klopt, met 💡 <strong>stap-voor-stap hints</strong>, visuele berekeningen en een mix van alle niveaus.</p>
+          </div>
+          <div class="mode-card mode-card-growth" data-mode="growth">
+            <div class="growth-mode-badge">NIEUW ⭐</div>
+            <h4>🌱➡️🏆 Opbouwende Groei-modus (Punten & Levels)</h4>
+            <p>Begin <strong>makkelijk (Level 1 🌱)</strong>! Bij elk goed antwoord verdien je punten en groeit het niveau mee naar <strong>Level 2 🌿</strong> en <strong>Level 3 🏆 (Havo/Vwo)</strong>.</p>
+          </div>
+          <div class="mode-card" data-mode="exam">
+            <h4>🔵 Toetsmodus (Cito / Leerling in beeld)</h4>
+            <p>Serieuze toetssimulatie op hoog niveau: <strong>geen hints</strong>, vragen markeren 🚩, inleveroverzicht en referentieniveaus (1F/1S/2F).</p>
+          </div>
+        </div>
+
+        <button class="btn-primary-large" id="btn-start-test">
+          Start Toets! 🚀
+        </button>
+
+        <button class="btn-ai-custom" id="btn-open-ai-modal">
+          ✨ Maak een toets over een eigen favoriet thema (met AI)
+        </button>
+      </div>
+    </section>
+
+    <!-- 2. QUIZ / TOETSSCHERM -->
+    <section class="view" id="view-quiz">
+      
+      <!-- Quiz Topbar -->
+      <div class="quiz-topbar">
+        <div class="progress-info">
+          <span class="question-counter" id="question-counter-text">Vraag 1 van 10</span>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-bar-fill"></div>
+          </div>
+          <span id="quiz-timer" style="font-weight: 600; font-size: 0.9rem;">⏱️ 0:00</span>
+        </div>
+
+        <div class="quiz-tools">
+          <button class="tool-btn btn-flag" id="btn-quiz-flag" title="Markeer deze vraag met een vlaggetje om later nog eens te bekijken">
+            🚩 Markeren
+          </button>
+          <button class="tool-btn" id="btn-quiz-speak" title="Laat de vraag voorlezen">
+            🔊 Voorlezen
+          </button>
+          <button class="tool-btn btn-scratchpad" id="btn-quiz-scratchpad" title="Open digitaal kladblok">
+            ✏️ Kladblok
+          </button>
+          <button class="tool-btn btn-hint" id="btn-quiz-hint" title="Vraag een hint voor deze som">
+            💡 Hint
+          </button>
+        </div>
+      </div>
+
+      <!-- Punten- & Levelbalk (Alleen zichtbaar in Opbouwende Groei-modus) -->
+      <div class="growth-status-bar" id="growth-status-bar" style="display: none;">
+        <div class="growth-status-left">
+          <span class="growth-level-badge level-1" id="growth-level-badge">🌱 Level 1: Makkelijk (1F Basis)</span>
+          <span class="growth-points-pill" id="growth-points-pill">⭐ 0 punten</span>
+          <span class="growth-streak-pill" id="growth-streak-pill" style="display: none;">🔥 0 op rij!</span>
+        </div>
+        <div class="growth-status-right">
+          <div class="growth-progress-label" id="growth-next-level-text">Verdien 50 punten voor Level 2 🌿</div>
+          <div class="growth-progress-track">
+            <div class="growth-progress-fill" id="growth-level-progress-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hint Box (Toggles upon click) -->
+      <div class="hint-container" id="quiz-hint-card">
+        <div class="hint-step">
+          <div class="hint-step-title">💡 Stap 1: Denktip</div>
+          <div class="hint-step-content" id="hint-step1-content"></div>
+        </div>
+        <div id="hint-step2-wrapper" style="display: none; margin-top: 12px; padding-top: 10px; border-top: 1px dashed #f59e0b;">
+          <div class="hint-step-title">📝 Stap 2: Stap-voor-stap uitrekening & Plaatje</div>
+          <div class="hint-step-content" id="hint-step2-content"></div>
+          <div id="hint-visual-container"></div>
+        </div>
+        <button class="btn-show-step2" id="btn-show-hint-step2">
+          Ik begrijp het nog niet: toon de berekening stap voor stap 👇
+        </button>
+      </div>
+
+      <!-- Reading Passage (Alleen zichtbaar bij Begrijpend Lezen) -->
+      <div class="passage-card" id="quiz-passage-card" style="display: none;">
+        <div class="passage-header">
+          <h3 class="passage-title" id="passage-title">Titel van de tekst</h3>
+          <span class="passage-tag">📖 Leestekst</span>
+        </div>
+        
+        <!-- Highlighter Toolbar -->
+        <div class="highlighter-toolbar">
+          <button class="highlighter-btn" id="btn-toggle-highlighter" title="Schakel de markeerstift in of uit">
+            🖍️ Markeerstift
+          </button>
+          <div class="highlighter-colors" id="highlighter-colors-panel">
+            <span class="highlighter-color-dot dot-yellow active" data-color="yellow" title="Geel"></span>
+            <span class="highlighter-color-dot dot-green" data-color="green" title="Groen"></span>
+            <span class="highlighter-color-dot dot-pink" data-color="pink" title="Roze"></span>
+            <button class="highlighter-btn" id="btn-clear-highlights" style="margin-left: 6px;" title="Wis alle markeringen in deze tekst">
+              🧽 Wis Markeringen
+            </button>
+          </div>
+          <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: auto;">👆 Veeg over tekst om te markeren of wissen</span>
+        </div>
+
+        <div class="passage-body" id="passage-body"></div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="question-card">
+        <div class="question-meta">
+          <span class="subcat-badge" id="question-subcat-badge">🧮 Categorie</span>
+          <span class="level-tag-badge" id="question-level-badge" style="display: none;">🌱 Level 1</span>
+        </div>
+
+        <div class="question-text" id="question-text">
+          De vraag komt hier...
+        </div>
+
+        <!-- Visueel Plaatje Container (bijv. Rechthoek met maten, Verhoudingstabel, Breukenstrook) -->
+        <div id="question-visual-container"></div>
+
+        <div class="options-grid" id="options-grid">
+          <!-- Dynamically populated options A, B, C, D -->
+        </div>
+
+        <!-- Direct Feedback (Oefenmodus) -->
+        <div class="feedback-box" id="feedback-box"></div>
+      </div>
+
+      <!-- Bottom Nav -->
+      <div class="quiz-nav">
+        <button class="btn-nav" id="btn-prev-question" disabled>
+          ⬅️ Vorige
+        </button>
+
+        <div class="question-nav-middle">
+          <button class="btn-nav" id="btn-open-cito-overview" title="Bekijk alle vragen en de status van je antwoorden">
+            📋 Overzicht
+          </button>
+        </div>
+
+        <button class="btn-nav primary" id="btn-next-question">
+          Volgende ➡️
+        </button>
+        <button class="btn-nav primary" id="btn-finish-test" style="display: none; background: #16a34a; border-color: #16a34a;">
+          Toets Inleveren 🏁
+        </button>
+      </div>
+
+      <!-- Question Grid Dots -->
+      <div class="question-dots-grid" id="question-dots-grid"></div>
+    </section>
+
+    <!-- 3. RESULTATEN SCHERM -->
+    <section class="view" id="view-results">
+      <div class="result-hero">
+        <div class="result-emoji">🎉</div>
+        <h2>Toets Afgerond!</h2>
+        <p>Goed gewerkt, <strong id="result-student-name">Mijn Kind</strong>!</p>
+        
+        <div class="result-score" id="result-score-text">18 / 20</div>
+        <div style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 16px;" id="result-percentage-text">
+          (90% goed)
+        </div>
+
+        <div class="schooladvies-card">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">
+            Doorstroomtoets Indicatie
+          </div>
+          <div class="advies-badge" id="result-advies-badge">VWO</div>
+          <p id="result-advies-desc" style="font-size: 0.95rem; color: #334155; line-height: 1.5;"></p>
+        </div>
+
+        <!-- Cito Referentieniveaus (1F / 1S / 2F) -->
+        <div class="referentie-container" id="result-referentie-container"></div>
+      </div>
+
+      <!-- Domain Scores -->
+      <div class="domain-scores" id="domain-scores-container"></div>
+
+      <!-- Full Question Review -->
+      <div class="review-section">
+        <h3 class="section-title">📋 Nakijkoverzicht & Uitwerkingen</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 14px;">
+          Bekijk hieronder alle gemaakte sommen en leesvragen met de volledige stappen en uitleg.
+        </p>
+
+        <!-- Filter tabs: Alle, Alleen Fout, Alleen Goed -->
+        <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;" id="results-filter-pills">
+          <button class="pill-option selected" data-filter="all" id="btn-filter-res-all">Alle Vragen</button>
+          <button class="pill-option" data-filter="wrong" id="btn-filter-res-wrong" style="color: #991b1b; font-weight: 700;">❌ Alleen Fout</button>
+          <button class="pill-option" data-filter="correct" id="btn-filter-res-correct" style="color: #166534; font-weight: 700;">✅ Alleen Goed</button>
+        </div>
+
+        <div id="review-questions-list"></div>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap;">
+        <button class="btn-primary-large" id="btn-new-test" style="max-width: 250px;">
+          🔄 Nieuwe Toets Maken
+        </button>
+        <button class="btn-nav" id="btn-view-history-from-results" style="max-width: 250px; padding: 16px;">
+          📊 Eerdere Resultaten
+        </button>
+      </div>
+    </section>
+
+    <!-- 4. GESCHIEDENIS & STATISTIEKEN SCHERM -->
+    <section class="view" id="view-history">
+      <div class="setup-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+          <h2 style="font-size: 1.4rem; font-weight: 800;">📊 Resultaten & Voortgang</h2>
+          <button class="btn-nav" id="btn-back-from-history">Terug naar Start ⬅️</button>
+        </div>
+
+        <div id="history-stats-box" style="margin-bottom: 24px;"></div>
+
+        <h3 class="section-title">Gemaakte Toetsen & Nakijken</h3>
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+              <tr style="background: var(--bg-app); border-bottom: 2px solid var(--border);">
+                <th style="padding: 10px;">Datum</th>
+                <th style="padding: 10px;">Vak</th>
+                <th style="padding: 10px;">Goed / Fout</th>
+                <th style="padding: 10px;">Score</th>
+                <th style="padding: 10px;">Indicatie</th>
+                <th style="padding: 10px;">Modus</th>
+                <th style="padding: 10px; text-align: center;">Vragen Inzien</th>
+              </tr>
+            </thead>
+            <tbody id="history-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: Wi-Fi Verbinden voor iPad -->
+  <div class="modal-overlay" id="wifi-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">📱 Openen op de iPad</h3>
+        <button class="btn-close" id="btn-close-wifi-modal">&times;</button>
+      </div>
+      <p style="font-size: 0.95rem; color: #334155; margin-bottom: 14px;">
+        Zorg dat de iPad met hetzelfde Wi-Fi netwerk is verbonden als deze computer.
+      </p>
+
+      <div class="qr-container">
+        <img id="qr-modal-image" class="qr-image" src="" alt="QR Code voor iPad">
+        <p style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 10px;">
+          📷 <strong>Scan de QR-code</strong> met de Camera-app van de iPad, of typ dit adres in Safari:
+        </p>
+        <div class="wifi-url-box" id="qr-modal-url">http://...</div>
+      </div>
+
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px; margin-top: 14px; font-size: 0.85rem; color: #166534;">
+        💡 <strong>Handige tip:</strong> Tik op de iPad in Safari op het 'Deel'-icoon en kies <em>"Zet op beginscherm"</em>. Dan krijgt je kind direct een echt app-icoontje op de iPad!
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Digitaal Kladblok voor iPad -->
+  <div class="scratchpad-overlay" id="scratchpad-modal">
+    <div class="scratchpad-container">
+      <div class="scratchpad-header">
+        <div class="scratchpad-toolbar">
+          <strong style="margin-right: 6px;">✏️ Kladblok</strong>
+          <button class="scratchpad-btn active" id="btn-tool-pen">Pen</button>
+          <button class="scratchpad-btn" id="btn-tool-eraser">Gum</button>
+          <div style="display: flex; gap: 4px; align-items: center; margin-left: 8px;">
+            <span class="color-dot active" data-color="#2563eb" style="background: #2563eb;"></span>
+            <span class="color-dot" data-color="#0f172a" style="background: #0f172a;"></span>
+            <span class="color-dot" data-color="#dc2626" style="background: #dc2626;"></span>
+            <span class="color-dot" data-color="#16a34a" style="background: #16a34a;"></span>
+            <span class="color-dot" data-color="#db2777" style="background: #db2777;" title="Roze"></span>
+          </div>
+          <button class="scratchpad-btn" id="btn-clear-scratchpad" style="margin-left: 8px; color: #ef4444;">Wissen 🗑️</button>
+        </div>
+        <button class="scratchpad-btn" id="btn-close-scratchpad" style="font-weight: 700;">Sluiten ✕</button>
+      </div>
+
+      <div class="scratchpad-canvas-wrapper">
+        <canvas id="scratchpad-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: AI Toets Generator -->
+  <div class="modal-overlay" id="ai-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">✨ Eigen Thema Toets met AI</h3>
+        <button class="btn-close" id="btn-close-ai-modal">&times;</button>
+      </div>
+      <p style="font-size: 0.9rem; color: #475569; margin-bottom: 14px;">
+        Wil je kind graag oefenen met sommen over <em>Minecraft</em>, <em>Formule 1</em>, <em>Ruimtevaart</em> of <em>Paarden</em>? Gemini genereert een gloednieuwe toets op groep 8 niveau!
+      </p>
+
+      <div style="margin-bottom: 12px;">
+        <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;">Thema of onderwerp:</label>
+        <input type="text" id="ai-theme" placeholder="Bv: Ruimtevaart & Astronauten, Formule 1, Dieren" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem;">
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;">Vakgebied:</label>
+        <select id="ai-domain" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem;">
+          <option value="all">🌟 Mix van Rekenen, Lezen en Taal</option>
+          <option value="rekenen">🧮 Alleen Rekenen</option>
+          <option value="begrijpendLezen">📖 Alleen Begrijpend Lezen</option>
+          <option value="taalverzorging">✍️ Alleen Taalverzorging</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;">Aantal vragen:</label>
+        <select id="ai-count" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem;">
+          <option value="5">5 vragen (Kort proefje)</option>
+          <option value="10" selected>10 vragen (Standaard)</option>
+          <option value="15">15 vragen</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;">Google Gemini API Sleutel:</label>
+        <input type="password" id="ai-api-key" placeholder="AIzaSy..." style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem;">
+        <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;">
+          (De standaard toetsen werken altijd zonder API sleutel!)
+        </span>
+      </div>
+
+      <button class="btn-primary-large" id="btn-generate-ai">
+        Toets Genereren met AI 🚀
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: Achtergrondkleur / Thema Kiezen -->
+  <div class="modal-overlay" id="theme-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🎨 Kies je Favoriete Kleur</h3>
+        <button class="btn-close" id="btn-close-theme-modal">&times;</button>
+      </div>
+      <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 14px;">
+        Kies een achtergrondkleur die jij het prettigst vindt om naar te kijken tijdens het oefenen:
+      </p>
+
+      <div class="theme-picker-grid">
+        <div class="theme-option-card active" data-theme="default">
+          <div class="theme-color-preview" style="background: #f8fafc; border-color: #4f46e5;"></div>
+          <span class="theme-option-name">Standaard</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">Helder wit/blauw</span>
+        </div>
+        <div class="theme-option-card" data-theme="pink">
+          <div class="theme-color-preview" style="background: #fdf2f8; border-color: #db2777;"></div>
+          <span class="theme-option-name">Roze</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">Vrolijk zachtroze</span>
+        </div>
+        <div class="theme-option-card" data-theme="mint">
+          <div class="theme-color-preview" style="background: #f0fdf4; border-color: #059669;"></div>
+          <span class="theme-option-name">Mintgroen</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">Rustgevend groen</span>
+        </div>
+        <div class="theme-option-card" data-theme="lavender">
+          <div class="theme-color-preview" style="background: #f5f3ff; border-color: #7c3aed;"></div>
+          <span class="theme-option-name">Lavendel</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">Zacht paars pastel</span>
+        </div>
+        <div class="theme-option-card" data-theme="peach">
+          <div class="theme-color-preview" style="background: #fff7ed; border-color: #ea580c;"></div>
+          <span class="theme-option-name">Perzik</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">Warm & rustig</span>
+        </div>
+        <div class="theme-option-card" data-theme="dyslexia">
+          <div class="theme-color-preview" style="background: #fef9c3; border-color: #ca8a04;"></div>
+          <span class="theme-option-name">Dyslexie Geel</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">Zacht voor de ogen</span>
+        </div>
+        <div class="theme-option-card" data-theme="dark">
+          <div class="theme-color-preview" style="background: #0f172a; border-color: #6366f1;"></div>
+          <span class="theme-option-name">Nachtmodus</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">Donker scherm</span>
+        </div>
+      </div>
+
+      <button class="btn-primary-large" id="btn-save-theme" style="margin-top: 10px;">
+        Klaar! ✨
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: Cito Leerling in beeld - Inlever-overzicht -->
+  <div class="modal-overlay" id="cito-overview-modal">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 class="modal-title">📋 Controleer je Toets (Cito Overzicht)</h3>
+        <button class="btn-close" id="btn-close-cito-overview">&times;</button>
+      </div>
+
+      <!-- Warning banner if unanswered questions remain -->
+      <div class="cito-warning-banner" id="cito-unanswered-warning" style="display: none;">
+        <span>⚠️</span>
+        <div><strong>Let op:</strong> Je hebt nog niet alle vragen beantwoord! Tik op een oranje vraagnummer om die vraag direct in te vullen.</div>
+      </div>
+
+      <!-- Stats summary -->
+      <div class="cito-stats-summary">
+        <div class="cito-stat-tile answered">
+          <div class="num" id="cito-stat-answered">0</div>
+          <div class="label">Beantwoord ✅</div>
+        </div>
+        <div class="cito-stat-tile unanswered">
+          <div class="num" id="cito-stat-unanswered">0</div>
+          <div class="label">Open ⏳</div>
+        </div>
+        <div class="cito-stat-tile flagged">
+          <div class="num" id="cito-stat-flagged">0</div>
+          <div class="label">Gemarkeerd 🚩</div>
+        </div>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">
+        Tik op een vraagnummer om die vraag direct te bekijken of aan te passen:
+      </p>
+
+      <!-- Question cell grid -->
+      <div class="cito-questions-overview" id="cito-overview-grid">
+        <!-- Dynamically rendered cells -->
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+        <button class="btn-nav" id="btn-cito-resume" style="padding: 12px 18px;">
+          ⬅️ Verdergaan met Toets
+        </button>
+        <button class="btn-primary-large" id="btn-cito-confirm-submit" style="width: auto; padding: 12px 24px; background: #16a34a; border-color: #16a34a;">
+          Toets Definitief Inleveren 🏁
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Eerdere Toets Details & Vragen Nakijken -->
+  <div class="modal-overlay" id="history-detail-modal">
+    <div class="modal-card" style="max-width: 820px; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="history-detail-title">📋 Toets Nakijken</h3>
+        <button class="btn-close" id="btn-close-history-detail-modal">&times;</button>
+      </div>
+
+      <div id="history-detail-summary-bar" style="padding: 12px 0; border-bottom: 1px solid var(--border);"></div>
+
+      <!-- Filter tabs -->
+      <div style="display: flex; gap: 8px; margin: 12px 0; flex-wrap: wrap;" id="history-modal-filter-pills">
+        <button class="pill-option selected" data-filter="all" id="btn-hist-filter-all">Alle Vragen</button>
+        <button class="pill-option" data-filter="wrong" id="btn-hist-filter-wrong" style="color: #991b1b; font-weight: 700;">❌ Alleen Fout</button>
+        <button class="pill-option" data-filter="correct" id="btn-hist-filter-correct" style="color: #166534; font-weight: 700;">✅ Alleen Goed</button>
+      </div>
+
+      <!-- Question List Container -->
+      <div style="overflow-y: auto; flex: 1; padding-right: 6px;" id="history-detail-questions-list"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/visuals.js"></script>
+  <script src="js/highlighter.js"></script>
+  <script src="js/kladblok.js"></script>
+  <script src="js/speech.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

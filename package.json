@@ -1,0 +1,27 @@
+{
+  "name": "doorstroomtoets-groep-8",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "doorstroomtoets",
+    "groep-8",
+    "cito",
+    "rekenen",
+    "begrijpend-lezen",
+    "taalverzorging"
+  ],
+  "author": "kiyak03",
+  "license": "ISC",
+  "description": "Doorstroomtoets Groep 8 Oefen- en Toetsapp (Rekenen, Begrijpend Lezen & Taalverzorging)",
+  "dependencies": {
+    "@google/genai": "^2.30.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "qrcode": "^1.5.4"
+  }
+}
